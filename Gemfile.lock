@@ -1,0 +1,26 @@
+PATH
+  remote: .
+  specs:
+    olsen (0.0.3)
+      sadie
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    dbd-mysql (0.4.4)
+      dbi (>= 0.4.0)
+      mysql
+    dbi (0.4.5)
+      deprecated (= 2.0.1)
+    deprecated (2.0.1)
+    mysql (2.8.1)
+    sadie (0.0.34)
+      dbd-mysql
+      dbi
+      mysql
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  olsen!

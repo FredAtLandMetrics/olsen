@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+# run report for each input file
+nomoreopts = false
+ARGV.each do |infile|
+    
+    
+    puts "processing: #{infile}"
+    
+    Olsen.process infile
+    
+    
+end
+

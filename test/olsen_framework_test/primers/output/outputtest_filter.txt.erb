@@ -1,0 +1,4 @@
+item1: <%= S("testdata.group.item1") %>
+item2: <%= O("testdata.group.item2") %>
+item3: <%= O("testdata.group.item1", :filter => "testfilter1" ) %>
+item4: <%= O("testdata.group.item2", :filter => ["testfilter1","testfilter2"] ) %>
