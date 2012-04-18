@@ -1,1 +1,17 @@
-Olsen is a simple reporter.  More later.
+=Olsen
+==A simple reporter.
+
+===Overview
+Olsen is a framework that wraps the Sadie gem and provides a facility for producing reports which make use of data managed in a Sadie-style primer chassis.
+
+===Usage
+1. create/choose a directory to put the olsen framework in (or use /var/olsen, the default...ensure writable)
+2. call olsen -init [ -framework-dir /my/dir ]
+3. define jobs in jobs folder and filters, outputs, and inbound data primers in primers folder
+4. call olsen -process <job>
+5. find output product in output folder
+6. Rejoice!
+
+===Todo
+* enable a 'olsen -init -with-examples' that will create a functioning olsen framework with example ini files, sqlite databases and queries, pdf outputs, formatting filters, etc.
+* provide docs on job and pdf ini-file format
