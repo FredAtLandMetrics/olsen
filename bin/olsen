@@ -1,14 +1,69 @@
 #!/usr/bin/env ruby
+$:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
-# run report for each input file
-nomoreopts = false
-ARGV.each do |infile|
-    
-    
-    puts "processing: #{infile}"
-    
-    Olsen.process infile
-    
-    
+require 'olsen'
+
+# define usage writer
+def write_usage( msg=nil )
+    if defined? msg
+        puts "\n===  ERR: #{msg} ===\n\n"
+    end
+    usage_text = <<TXT
+
+    # to init framework with examples
+    olsen -init -framework-dir <dir>  # defaults to /var/olsen
+
+    # to process jobs
+    olsen -process [-framework-dir <dir>] <job1> <job2> ... <jobn>
+
+TXT
+    puts "USAGE:\n#{usage_text}"
 end
+
+# validate args
+if ARGV.length < 1
+    write_usage "not enough arguments"
+    exit
+end
+
+mainarg                 = ARGV.first
+secarg                  = ARGV[1]
+framework_dirpath       = "/var/olsen"
+restargs                = ARGV[1..(ARGV.length-1)]
+if secarg == "-framework-dir"
+    if ARGV.length < 3
+        write_usage "no framework dir given"
+        exit
+    end
+    framework_dirpath   = ARGV[2]
+    if mainarg == "-process"
+        if ARGV.length < 4
+            write_usage "no jobs listed"
+            exit
+        end
+        restargs        = ARGV[3..(ARGV.length-1)]
+    end
+end
+
+Olsen.setFrameworkDir framework_dirpath
+
+if ARGV.length > 0
+    case mainarg
+    when "-process"
+        # process each input file
+        restargs.each do |infile|
+            puts "processing: #{infile}"
+            Olsen.process infile
+        end
+    when "-init"
+        if ! File.writable? framework_dirpath
+            write_usage "directory not writable (#{framework_dirpath})"
+        end
+        Olsen.initFramework
+    else
+        write_usage
+        exit
+    end
+end
+
 

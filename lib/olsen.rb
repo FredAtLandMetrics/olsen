@@ -12,7 +12,6 @@ def O( key, params=nil )
     if defined? params
         if params.respond_to? "has_key?"
             if params.has_key? :filter
-#                 puts "got filter!!!"
                 filter = params[:filter]
                 if filter.respond_to? "each"
                     ret = Olsen::filter instance.get( key ), filter
@@ -24,7 +23,6 @@ def O( key, params=nil )
             end
         end
     end
-#     puts "O(#{key}): NO PARAMS?"
     instance.get( key )
     
 end
@@ -32,8 +30,6 @@ end
 class Olsen
     
     def self.filter( value, filters )
-        
-#         puts "filters: #{filters}"
         
         # validate filters
         defined? filters \
@@ -43,12 +39,8 @@ class Olsen
         
         instance = Sadie::getCurrentSadieInstance
         
-        #pp(instance)
-        
         fhnd = "filter.#{filters[0]}"
         f = instance.get fhnd
-        
-#         puts "f(#{fhnd}): #{f}"
         
         if filters.length > 1
             rem = filters[1..(filters.length-1)]
@@ -61,14 +53,24 @@ class Olsen
         end
     end
     
+    def self.initFramework
+        if ! defined? @@framework_dirpath
+            puts "framework dirpath not set...aborting."
+            return nil
+        end        
+        puts "initializing olsen framework in #{@@framework_dirpath}"
+        [ "output", "jobs", "primers" ].each do |dir|
+            Dir.mkdir File.join( @@framework_dirpath, dir )
+        end
+    end
+    
+    def self.setFrameworkDir( dirpath )
+        @@framework_dirpath = dirpath
+    end
+    
     def self.registerFilter( name, &block )
         instance = Sadie::getCurrentSadieInstance
         instance.set "filter.#{name}", block
-#         if ! defined? @@filters
-#             @@filters = { name => block }
-#         else
-#             @@filters[name] = block
-#         end
     end
     
     def self.initSadie( params )
@@ -99,10 +101,19 @@ class Olsen
         end
         
         # init sadie
-#         puts "init storage!"
         storage = Sadie::getSadieInstance( sadieparams )
         
-        
+        # add olsen plugin handlers
+        plugins_dirpath = File.join(
+            ENV['GEM_HOME'],
+            "gems/olsen-#{Olsen::VERSION}",
+            "lib/olsen/primer_plugins"
+        )
+        if ! File.exists? plugins_dirpath   # for dev
+            plugins_dirpath = "lib/olsen/primer_plugins"
+        end        
+        storage.addPrimerPluginsDirPath plugins_dirpath
+        storage.initializePrimers
     end
     
     def self.process( job, storage )
@@ -112,9 +123,16 @@ class Olsen
             return nil
         end
         
+        # turn files into hashes
         if ! job.respond_to? "each"
             if File.exists? job
                 job = Sadie::iniFileToHash( job )
+            elsif defined? @@framework_dirpath
+                jobdirpath = File.join( @@framework_dirpath, "jobs" )
+                jobfile = File.join jobdirpath, "#{job}.job" 
+                if File.exists? jobfile
+                    job = Sadie::iniFileToHash( jobfile )
+                end
             else
                 puts "job param was non-hash and was not a path to valid job file"
                 return nil
@@ -126,29 +144,9 @@ class Olsen
             puts "job has no output definition"
             return nil
         end
-        
-#         sadieparams = {
-#             "sadie.primer_plugins_dirpath" => "lib/olsen/primer_plugins",
-#             "sadie.primers_dirpath" => "primers"
-#         }
-        
-        # set keys from job
-#         [ "sadie", "parameters","olsen" ].each do |ptype|
-#             if job.has_key? ptype 
-#                 job[ptype].each do |key,value|
-#                     if ptype.eql? "sadie"
-#                         sadieparams["sadie.#{key}"] = value
-#                     else
-#                         sadieparams["#{key}"] = value
-#                     end
-#                 end
-#             end
-#         end
-        
-
-        
-        
+                
         # call output triggers
+        storage = Sadie::getCurrentSadieInstance
         job["output"].each do |x,type|
             outputkey = "output.#{type}"
             puts "processing output trigger: #{outputkey}"
