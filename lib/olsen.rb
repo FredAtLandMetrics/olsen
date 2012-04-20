@@ -1,4 +1,5 @@
 require 'pp'
+require 'olsen/version'
 
 def O( key, params=nil )
     
@@ -75,7 +76,6 @@ class Olsen
     
     def self.initSadie( params )
         sadieparams = {
-            "sadie.primer_plugins_dirpath" => "lib/olsen/primer_plugins",
             "sadie.primers_dirpath" => "primers"
         }
         
