@@ -19,10 +19,10 @@ These should be suffixed with a '.job' and they should be in the jobs folder.
 =====Example
 
   [output]
-o1=<filename in the outputs folder>
-o2=<another one>
-...
-oN=<and another>
+  o1=<filename in the outputs folder>
+  o2=<another one>
+  ...
+  oN=<and another>
 
 ====PDF INI files
 These should go in outputs and end in '.pdf.ini'
@@ -30,11 +30,11 @@ These should go in outputs and end in '.pdf.ini'
 =====Example
 
   [pdf]
-type = latexmk  #only type supported for now is latexmk
+  type = latexmk  #only type supported for now is latexmk
   
   [latexmk]
-path_to_latexmk = /usr/bin/latexmk  #optional, defaults to /usr/bin/latexmk
-template = output.outputtest_pdf.tex #should point to a .tex.erb file in the outputs directory
+  path_to_latexmk = /usr/bin/latexmk  #optional, defaults to /usr/bin/latexmk
+  template = output.outputtest_pdf.tex #should point to a .tex.erb file in the outputs directory
 
 ===Todo
 * enable a 'olsen -init -with-examples' that will create a functioning olsen framework with example ini files, sqlite databases and queries, pdf outputs, formatting filters, etc.

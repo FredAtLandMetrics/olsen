@@ -41,6 +41,7 @@ class Olsen
         instance = Sadie::getCurrentSadieInstance
         
         fhnd = "filter.#{filters[0]}"
+        puts "fetching filter: #{fhnd}"
         f = instance.get fhnd
         
         if filters.length > 1

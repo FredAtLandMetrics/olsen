@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    olsen (0.0.7)
+    olsen (0.0.8)
       sadie
 
 GEM
@@ -14,7 +14,7 @@ GEM
       deprecated (= 2.0.1)
     deprecated (2.0.1)
     mysql (2.8.1)
-    sadie (0.0.40)
+    sadie (0.0.42)
       dbd-mysql
       dbi
       mysql
