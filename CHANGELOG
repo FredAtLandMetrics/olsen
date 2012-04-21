@@ -1,4 +1,5 @@
 [0.0.4] initial public release...working in a lot of ways, but no docs
 [0.0.6] added olsen executable to init and process jobs, added pdf generation, unit tests
 [0.0.7] added README
+[0.0.8] updated docs, fixed a filter issue
 

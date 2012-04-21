@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    olsen (0.0.8)
+    olsen (0.0.9)
       sadie
 
 GEM

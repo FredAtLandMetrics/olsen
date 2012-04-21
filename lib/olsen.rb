@@ -38,11 +38,14 @@ class Olsen
         filters.respond_to? "each" \
             or return value
         
-        instance = Sadie::getCurrentSadieInstance
+        sadie = Sadie::getCurrentSadieInstance
         
         fhnd = "filter.#{filters[0]}"
         puts "fetching filter: #{fhnd}"
-        f = instance.get fhnd
+        
+        sadie.isset? fhnd \
+            or raise "olsen error: filter(#{fhnd}) does not exist"
+        f = sadie.get fhnd
         
         if filters.length > 1
             rem = filters[1..(filters.length-1)]
@@ -71,6 +74,7 @@ class Olsen
     end
     
     def self.registerFilter( name, &block )
+        puts "registering filter: #{name}"
         instance = Sadie::getCurrentSadieInstance
         instance.set "filter.#{name}", block
     end
@@ -111,7 +115,10 @@ class Olsen
             "lib/olsen/primer_plugins"
         )
         if ! File.exists? plugins_dirpath   # for dev
-            plugins_dirpath = "lib/olsen/primer_plugins"
+            plugins_dirpath = File.expand_path "lib/olsen/primer_plugins"
+        end        
+        if ! File.exists? plugins_dirpath   # for dev
+            plugins_dirpath = File.join "/home/fred/Source/LMSys/olsen", "lib/olsen/primer_plugins"
         end        
         storage.addPrimerPluginsDirPath plugins_dirpath
         storage.initializePrimers
@@ -160,12 +167,12 @@ class Olsen
         
     end
 
-    def registerFilter( filter, &block )
-        defined? @filters \
-            or @filters = Hash.new
-        
-        @filters["filter"] = block
-    end
+#     def registerFilter( filter, &block )
+#         defined? @filters \
+#             or @filters = Hash.new
+#         
+#         @filters["filter"] = block
+#     end
     
     def filter( filter_name, value )
         defined? @filters \

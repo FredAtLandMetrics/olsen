@@ -1,6 +1,6 @@
 Sadie::registerPrimerPlugin( { "match" => /\.filter.rb$/,
                                "accepts-block" => false,
-                               "prime-on-init" => false } ) do |sadie, key_prefix, primer_file_filepath|
+                               "prime-on-init" => true } ) do |sadie, key_prefix, primer_file_filepath|
     
     # basically, just loading a ruby file
     load primer_file_filepath
